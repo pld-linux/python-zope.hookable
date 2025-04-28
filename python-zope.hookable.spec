@@ -3,14 +3,15 @@
 %bcond_without	doc	# Sphinx documentation
 %bcond_without	tests	# unit tests (installed package required)
 %bcond_without	python2 # CPython 2.x module
-%bcond_without	python3 # CPython 3.x module
+%bcond_with	python3 # CPython 3.x module (built from python3-zope.hookable.spec)
 
 %define module	zope.hookable
 Summary:	Zope hookable module
 Summary(pl.UTF-8):	Moduł Zope hookable
 Name:		python-%{module}
+# keep 5.x here for python2 support
 Version:	5.4
-Release:	3
+Release:	4
 License:	ZPL v2.1
 Group:		Libraries/Python
 Source0:	https://files.pythonhosted.org/packages/source/z/zope.hookable/zope.hookable-%{version}.tar.gz
@@ -37,7 +38,7 @@ BuildRequires:	python3-zope.testrunner
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.714
 %if %{with doc}
-BuildRequires:	sphinx-pdg
+BuildRequires:	sphinx-pdg-2
 %endif
 Requires:	python-modules >= 1:2.7
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -89,7 +90,8 @@ Dokumentacja API modułu Pythona zope.hookable.
 
 %if %{with doc}
 PYTHONPATH=$(pwd)/src \
-%{__make} -C docs html
+%{__make} -C docs html \
+	SPHINXBUILD=sphinx-build-2
 %endif
 
 %install
